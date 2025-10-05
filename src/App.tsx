@@ -28,7 +28,7 @@ function App() {
     <div className="App">
       <AppHeader />
       <main className={styles.main_container}>
-        <BurgerIngredients />
+        <BurgerIngredients data={data}/>
         <BurgerConstructor
           selectedBun={selectedBun}
           data={selectedIngredients}

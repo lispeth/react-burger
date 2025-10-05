@@ -4,7 +4,7 @@ import Tab from '../../components/Tab';
 import styles from './burger-ingredients.module.css';
 import PropTypes from 'prop-types';
 
-const BurgerIngredients = (data) => {
+const BurgerIngredients = ({data}) => {
     const types = ['bun', 'sauce', 'main'];
     const getCategory = (type) => {
         switch (type) {
