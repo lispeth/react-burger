@@ -1,0 +1,45 @@
+.burger_constructor {
+  display: flex;
+  flex-direction: column;
+  max-height: 912px;
+  max-width: 600px;
+}
+
+.ingredient_wrapper {
+  display: flex;
+  max-height: 80px;
+  max-width: 560px;
+  align-items: center;
+  padding-left: 32px;
+}
+
+.drag_icon {
+  z-index: 1;
+  cursor: grab;
+}
+
+.scroll_section {
+  overflow-y: auto;
+  max-height: 480px;
+  scrollbar-color: #8585AD transparent;
+  scrollbar-width: thin;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.total_price {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: end;
+  padding: 0 20px;
+}
+
+.currency svg {
+  width: 32px;
+  height: 32px;
+}
+
+

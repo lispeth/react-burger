@@ -1,24 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import styles from "./App.module.css";
+import AppHeader from "./components/appheader";
+import BurgerConstructor from "./components/burger-constructor";
+import BurgerIngredients from "./components/burger-ingredients";
+import data from "./utils/data.json";
 
 function App() {
+  // захаркодим id выбранной булки
+  const selectedBunId = "60666c42cc7b410027a1a9b1";
+  const selectedBun = data.find((item) => item._id === selectedBunId);
+  // захаркодим id выбранных ингредиентов
+  const selectedIngredientsIds = [
+    "60666c42cc7b410027a1a9b3",
+    "60666c42cc7b410027a1a9b4",
+    "60666c42cc7b410027a1a9b8",
+    "60666c42cc7b410027a1a9bc",
+    "60666c42cc7b410027a1a9bb",
+    "60666c42cc7b410027a1a9bb",
+    "60666c42cc7b410027a1a9ba",
+    "60666c42cc7b410027a1a9b8",
+    "60666c42cc7b410027a1a9bd",
+    "60666c42cc7b410027a1a9b3",
+  ];
+  const selectedIngredients = data.filter((item) =>
+    selectedIngredientsIds.includes(item._id)
+  );
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <AppHeader />
+      <main className={styles.main_container}>
+        <BurgerIngredients />
+        <BurgerConstructor
+          selectedBun={selectedBun}
+          data={selectedIngredients}
+        />
+      </main>
     </div>
   );
 }
