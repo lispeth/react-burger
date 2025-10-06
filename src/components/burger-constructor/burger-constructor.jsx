@@ -23,7 +23,7 @@ const BurgerConstructor = ({ selectedBun, data }) => {
                 {data.map(item => (
                     <p key={item._id} className={classNames(styles.ingredient_wrapper, 'mt-4 mr-4')}>
                         <span className={classNames(styles.dragIcon, { [styles.hidden]: item.isLocked })}>
-                            <DragIcon type="primary" />
+                            <DragIcon type="primary" className={styles.drag_icon} />
                         </span>
                         <ConstructorElement
                             type={item.type}

@@ -1,7 +1,7 @@
 .burger_ingredients {
   display: flex;
   flex-direction: column;
-  height: 912px;
+  height: 100%;
   max-width: 600px;
   font-weight: 700;
   font-size: 36px;
@@ -19,10 +19,10 @@
   flex-direction: column;
   gap: 32px;
   padding: 16px;
+  max-height: 100%;
   overflow-y: auto;
   scrollbar-color: #8585AD transparent;
   scrollbar-width: thin;
-  max-height: 912px;
 }
 
 .ingredients_list {
