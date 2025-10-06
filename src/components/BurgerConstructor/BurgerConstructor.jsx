@@ -4,7 +4,8 @@ import styles from './BurgerConstructor.module.css';
 import { ConstructorElement, DragIcon, Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 
-const BurgerConstructor = ({ selectedBun, data }) => {
+const BurgerConstructor = ({ data }) => {
+    const {selectedBun, selectedIngredients} = data;
     return (
         <section className={classNames(styles.burger_constructor, 'pt-25 mr-4')}>
             <p className={classNames(styles.ingredient_wrapper)}>
@@ -20,7 +21,7 @@ const BurgerConstructor = ({ selectedBun, data }) => {
                 />
             </p>
             <div className={styles.scroll_section}>
-                {data.map(item => (
+                {selectedIngredients.map(item => (
                     <p key={item._id} className={classNames(styles.ingredient_wrapper, 'mt-4 mr-4')}>
                         <span className={classNames(styles.dragIcon, { [styles.hidden]: item.isLocked })}>
                             <DragIcon type="primary" className={styles.drag_icon} />
@@ -61,22 +62,25 @@ const BurgerConstructor = ({ selectedBun, data }) => {
 }
 
 BurgerConstructor.propTypes = {
-    selectedBun: PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        type: PropTypes.string.isRequired,
-        price: PropTypes.number.isRequired,
-        image: PropTypes.string.isRequired,
-        count: PropTypes.number
-    }).isRequired,
-    data: PropTypes.arrayOf(PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        type: PropTypes.string.isRequired,
-        price: PropTypes.number.isRequired,
-        image: PropTypes.string.isRequired,
-        count: PropTypes.number
-    })).isRequired
+    data: PropTypes.shape({
+        selectedBun: PropTypes.shape({
+            _id: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+            type: PropTypes.string.isRequired,
+            price: PropTypes.number.isRequired,
+            image: PropTypes.string.isRequired,
+            count: PropTypes.number
+        }).isRequired,
+        selectedIngredients: PropTypes.arrayOf(PropTypes.shape({
+            _id: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+            type: PropTypes.string.isRequired,
+            price: PropTypes.number.isRequired,
+            image: PropTypes.string.isRequired,
+            count: PropTypes.number,
+            isLocked: PropTypes.bool
+        })).isRequired
+    }).isRequired
 }
 
 export default BurgerConstructor;
