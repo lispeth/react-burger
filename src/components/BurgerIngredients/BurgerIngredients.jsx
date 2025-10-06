@@ -1,7 +1,7 @@
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
-import Tab from '../../components/Tab';
-import styles from './burger-ingredients.module.css';
+import Tab from '../Tab';
+import styles from './BurgerIngredients.module.css';
 import PropTypes from 'prop-types';
 
 const BurgerIngredients = ({data}) => {

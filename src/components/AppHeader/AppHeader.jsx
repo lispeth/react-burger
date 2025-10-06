@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { BurgerIcon, ListIcon, Logo, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components'
-import styles from './appheader.module.css';
+import styles from './AppHeader.module.css';
 import classnames from 'classnames';
 
 

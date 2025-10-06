@@ -1,8 +1,8 @@
 import styles from "./App.module.css";
-import AppHeader from "./components/appheader";
-import BurgerConstructor from "./components/burger-constructor";
-import BurgerIngredients from "./components/burger-ingredients";
-import data from "./utils/data.json";
+import AppHeader from "../AppHeader";
+import BurgerConstructor from "../BurgerConstructor";
+import BurgerIngredients from "../BurgerIngredients";
+import data from "../../utils/data.json";
 
 function App() {
   // захаркодим id выбранной булки
