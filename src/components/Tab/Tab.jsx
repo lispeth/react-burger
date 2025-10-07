@@ -1,19 +1,17 @@
 import { Tab as TabComponent } from '@ya.praktikum/react-developer-burger-ui-components';
 import React from 'react';
+import styles from './Tab.module.css';
 
-const Tab = ({className}) => {
-    const [current, setCurrent] = React.useState('buns');
+const Tab = ({ types }) => {
+    const [current, setCurrent] = React.useState('bun');
     return (
-        <div className={className}>
-            <TabComponent value="buns" active={current === 'buns'} onClick={setCurrent}>
-                Булки
-            </TabComponent>
-            <TabComponent value="sauces" active={current === 'sauces'} onClick={setCurrent}>
-                Соусы
-            </TabComponent>
-            <TabComponent value="fillings" active={current === 'fillings'} onClick={setCurrent}>
-                Начинки
-            </TabComponent>
+        <div className={styles.ingredients_tabs}>
+            {Object.keys(types).map((type) => (
+                <TabComponent key={type} value={type} active={current === type} onClick={setCurrent}>
+                    {types[type]}
+                </TabComponent>
+            ))}
+
         </div>
     )
 }
