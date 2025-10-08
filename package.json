@@ -23,6 +23,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "prepare:env": "cp -n .env.example .env",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
