@@ -14,9 +14,6 @@ const IngredientDetails = ({ ingredient }) => {
         <div className={styles.ingredient_details}>
             <img src={ingredient.image_large} alt='{ingredient.name}' className={styles.ingredient_image} />
             <p className='text text_type_main-medium mt-4 mb-8'>{ingredient.name}</p>
-            <p className='text text_type_main-small mb-8'>
-                Превосходные котлеты из марсианской Магнолии для фирменных космиических бургеров, набирающих популярность по всей вселенной.
-            </p>
             <div className={classNames(styles.ingredient_info, 'text text_type_main')}>
                 {Object.entries(detailsInfo).map(([key, value]) => (
                     <p key={key}>

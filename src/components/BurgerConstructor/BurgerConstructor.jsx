@@ -9,6 +9,7 @@ import OrderDetails from '../OrderDetails';
 
 const BurgerConstructor = ({ data }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [orderNumber, setOrderNumber] = useState('034536');
 
     const handleOrderButtonClick = () => {
         setIsModalOpen(true);
@@ -101,7 +102,7 @@ const BurgerConstructor = ({ data }) => {
                 </Button>
             </p>
             {isModalOpen && <Modal onClose={handleCloseOrderModal}>
-                <OrderDetails />
+                <OrderDetails orderNumber={orderNumber} />
             </Modal>}
         </section>
     )

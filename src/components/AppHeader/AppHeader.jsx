@@ -17,16 +17,18 @@ const AppHeader = () => {
                     <span className='text text_type_main-default text_color_inactive'>Лента заказов</span>
                 </a>
             </nav>
-            <main className={styles.mainlogo}>
-                <Logo />
-            </main>
+            <nav className={styles.mainlogo}>
+                <a href='/'>
+                    <Logo />
+                </a>
+            </nav>
             <span className={styles.navright}>
                 <a href='#' className={styles.navlink}>
                     <span className={styles.navicon}><ProfileIcon type="secondary" className={"pr-1"} /></span>
                     <span className='text text_type_main-default text_color_inactive'>Личный кабинет</span>
                 </a>
             </span>
-        </header>
+        </header >
     )
 }
 
