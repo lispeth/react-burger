@@ -1,0 +1,23 @@
+.order_details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+  }
+
+  .check_mark {
+    display: flex;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #2D2A5A;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+
+    .icon {
+        width: 90%;
+        height: 90%;
+    }
+  }

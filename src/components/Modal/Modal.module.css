@@ -1,0 +1,45 @@
+
+.modal_container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #1C1C21;
+    border-radius: 40px;
+    padding: 40px 40px 60px;
+    min-width: 720px;
+    max-height: fit-content;
+    z-index: 1001;
+    overflow: hidden;
+}
+
+.modal_header {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal_header .cross_button {
+    display: flex;
+    cursor: pointer;
+
+    :hover {
+        opacity: 0.5;
+    }
+}
+   
+
+.modal_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(171, 106, 106, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}

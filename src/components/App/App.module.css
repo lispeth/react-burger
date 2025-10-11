@@ -1,0 +1,13 @@
+.app {
+  overflow: hidden;
+}
+
+.main_container {
+  max-width: 1280px;
+  height: 80%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding-bottom: 60px;
+}
