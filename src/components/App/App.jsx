@@ -4,6 +4,8 @@ import AppHeader from "../AppHeader";
 import BurgerConstructor from "../BurgerConstructor";
 import BurgerIngredients from "../BurgerIngredients";
 import styles from "./App.module.css";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 function App() {
   const [allIngredients, setAllIngredients] = React.useState([]);
@@ -19,13 +21,15 @@ function App() {
 
 
   return (
-    <div className={styles.app}>
-      <AppHeader />
-      <main className={styles.main_container}>
-        <BurgerIngredients data={allIngredients} />
-        <BurgerConstructor data={allIngredients} />
-      </main>
-    </div>
+    <DndProvider backend={HTML5Backend}>
+      <div className={styles.app}>
+        <AppHeader />
+        <main className={styles.main_container}>
+          <BurgerIngredients data={allIngredients} />
+          <BurgerConstructor data={allIngredients} />
+        </main>
+      </div>
+    </DndProvider>
   );
 }
 

@@ -2,16 +2,38 @@ import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktiku
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import styles from './BurgerConstructor.module.css';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Modal from '../Modal';
 import OrderDetails from '../OrderDetails';
+import { useSelector, useDispatch } from 'react-redux';
+import { setOrderNumber } from '../../services/orderSlice';
+import { removeComponentFromConstructor } from '../../services/burgerConstructorSlice';
+import { useDrop } from 'react-dnd';
+import { addComponentToConstructor } from '../../services/burgerConstructorSlice';
 
 
-const BurgerConstructor = ({ data }) => {
+const BurgerConstructor = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [orderNumber, setOrderNumber] = useState('034536');
+    const bun = useSelector((store) => store.burgerConstructor.bun);
+    const ingredients = useSelector((store) => store.burgerConstructor.ingredients);
+    const orderNumber = useSelector((store) => store.order.orderNumber);
+    const dispatch = useDispatch();
+    const [{ isHover }, dropTarget] = useDrop({
+        accept: "ingredient",
+        drop(item) {
+            dispatch(addComponentToConstructor(item));
+            console.log('Dropped item:', item);
+        },
+        collect: monitor => ({
+            isHover: monitor.isOver(),
+        })
+    });
+
+    const borderColor = isHover ? 'lightgreen' : 'transparent';
+
 
     const handleOrderButtonClick = () => {
+        dispatch(setOrderNumber(123234));
         setIsModalOpen(true);
     }
 
@@ -19,54 +41,44 @@ const BurgerConstructor = ({ data }) => {
         setIsModalOpen(!isModalOpen);
     }
 
-    // захаркодим id выбранной булки
-    const selectedBunId = "643d69a5c3f7b9001cfa093c";
-
-    // захаркодим id выбранных ингредиентов
-    const ingredientsId = [
-        "643d69a5c3f7b9001cfa0941",
-        "643d69a5c3f7b9001cfa093e",
-        "643d69a5c3f7b9001cfa0942",
-        "643d69a5c3f7b9001cfa0943",
-        "643d69a5c3f7b9001cfa093f",
-        "643d69a5c3f7b9001cfa0946",
-        "643d69a5c3f7b9001cfa094a",
-        "643d69a5c3f7b9001cfa0947",
-        "643d69a5c3f7b9001cfa0944",
-    ];
-
-    const selectedIngredientsArr = [];
-    ingredientsId.forEach(id => {
-        const ingredient = data.find(item => item._id === id);
-        if (ingredient) {
-            selectedIngredientsArr.push(ingredient);
-        }
-    });
-
-    // формируем временный объект с выбранными ингредиентами
-    const constructorData = {
-        selectedBun: data.find((item) => item._id === selectedBunId),
-        selectedIngredients: selectedIngredientsArr
+    const handleDeleteItem = (id) => {
+        console.log('ID!!!', id);
+        dispatch(removeComponentFromConstructor(id));
     }
+
+    const totalPrice = useMemo(() => {
+        const bunPrice = bun ? bun.price * 2 : null;
+        const ingredientsPrice = ingredients.reduce((total, item) => total + item.price, 0);
+        return bunPrice + ingredientsPrice;
+    }, [ingredients, bun]);
 
 
     return (
-        <section className={classNames(styles.burger_constructor, 'pt-25 mr-4')}>
+        <section
+            className={classNames(styles.burger_constructor, 'pt-25 mr-4')}
+            ref={dropTarget}
+            style={{ borderColor, border: '1px solid transparent' }}
+        >
+
             <p className={classNames(styles.ingredient_wrapper)}>
                 <span className={classNames(styles.drag_icon, { [styles.hidden]: true })}>
                     <DragIcon type="primary" />
                 </span>
-                {constructorData.selectedBun && <ConstructorElement
+                {bun && <ConstructorElement
+                    key={bun._id}
                     type="top"
-                    text={`${constructorData.selectedBun.name} (верх)`}
-                    price={constructorData.selectedBun.price}
+                    text={`${bun.name} (верх)`}
+                    price={bun.price}
                     isLocked={true}
-                    thumbnail={constructorData.selectedBun.image}
+                    thumbnail={bun.image}
                 />}
             </p>
             <div className={styles.scroll_section}>
-                {constructorData.selectedIngredients.map(item => (
-                    <p key={item._id} className={classNames(styles.ingredient_wrapper, 'mt-4 mr-4')}>
+                {ingredients.map(item => (
+                    <p
+                        key={item.uniqueId}
+                        className={classNames(styles.ingredient_wrapper, 'mt-4 mr-4')}
+                    >
                         <span className={classNames(styles.dragIcon, { [styles.hidden]: item.isLocked })}>
                             <DragIcon type="primary" className={styles.drag_icon} />
                         </span>
@@ -76,6 +88,7 @@ const BurgerConstructor = ({ data }) => {
                             price={item.price}
                             isLocked={item.isLocked}
                             thumbnail={item.image}
+                            handleClose={() => handleDeleteItem(item.uniqueId)}
                         />
                     </p>
                 ))}
@@ -84,16 +97,16 @@ const BurgerConstructor = ({ data }) => {
                 <span className={classNames(styles.drag_icon, { [styles.hidden]: true })}>
                     <DragIcon type="primary" />
                 </span>
-                {constructorData.selectedBun && <ConstructorElement
+                {bun && <ConstructorElement
                     type="bottom"
-                    text={`${constructorData.selectedBun.name} (низ)`}
-                    price={constructorData.selectedBun.price}
+                    text={`${bun.name} (низ)`}
+                    price={bun.price}
                     isLocked={true}
-                    thumbnail={constructorData.selectedBun.image}
+                    thumbnail={bun.image}
                 />}
             </p>
             <p className={classNames(styles.total_price, 'mt-10')}>
-                <span className="text text_type_digits-medium">610</span>
+                <span className="text text_type_digits-medium">{totalPrice}</span>
                 <span className={classNames(styles.currency, 'mr-10')}>
                     <CurrencyIcon type="primary" />
                 </span>
@@ -101,6 +114,7 @@ const BurgerConstructor = ({ data }) => {
                     Оформить заказ
                 </Button>
             </p>
+
             {isModalOpen && <Modal onClose={handleCloseOrderModal}>
                 <OrderDetails orderNumber={orderNumber} />
             </Modal>}

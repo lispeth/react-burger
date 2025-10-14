@@ -1,27 +1,32 @@
+import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { addSelectedIngredient } from '../../services/ingredientInfoSlice';
 import IngredientItem from '../IngredientItem';
 import styles from './IngredientsList.module.css';
-import PropTypes from 'prop-types';
 
-const IngredientsList = ({ data, ingredientTypes, onItemClick }) => {
+const IngredientsList = ({ data, ingredientTypes, onItemClick, onScroll }) => {
+    const dispatch = useDispatch();
+
     const getCategory = (type) => {
         return ingredientTypes[type];
     }
 
     const handleItemClick = (ingredient) => {
         onItemClick(ingredient);
+        dispatch(addSelectedIngredient(ingredient));
     }
 
     return (
-        <div className={styles.ingredients_categories}>
+        <div className={styles.ingredients_categories} onScroll={onScroll}>
             {Object.keys(ingredientTypes).map((type) => (
                 <div key={type} className="mb-10">
-                    <h2 className="text text_type_main-medium mb-6">
+                    <h2 className="text text_type_main-medium mb-6" id={type} >
                         {getCategory(type)}
                     </h2>
                     <div className={styles.ingredients_list}>
                         {data.filter(item => item.type === type).map(item => {
                             return (
-                                <IngredientItem key={item._id} item={item} onClick={() => handleItemClick(item)} />
+                                <IngredientItem key={item.uniqueId} item={item} onClick={() => handleItemClick(item)} />
                             )
                         })
                         }
