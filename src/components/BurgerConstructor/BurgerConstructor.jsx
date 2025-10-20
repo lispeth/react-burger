@@ -1,23 +1,23 @@
-import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import styles from './BurgerConstructor.module.css';
 import { useMemo, useState } from 'react';
+import { useDrop } from 'react-dnd';
+import { useDispatch, useSelector } from 'react-redux';
+import { addComponentToConstructor, removeComponentFromConstructor } from '../../services/burgerConstructorSlice';
+import { decrementCount, incrementCount } from '../../services/ingredientsSlice';
+import { getOrderDetails, resetOrder } from '../../services/orderSlice';
 import Modal from '../Modal';
 import OrderDetails from '../OrderDetails';
-import { useSelector, useDispatch } from 'react-redux';
-import { setOrderNumber } from '../../services/orderSlice';
-import { removeComponentFromConstructor, addComponentToConstructor } from '../../services/burgerConstructorSlice';
-import { useDrop } from 'react-dnd';
-import { decrementCount, incrementCount } from '../../services/ingredientsSlice';
+import styles from './BurgerConstructor.module.css';
+import Loader from '../Loader';
 
 
 const BurgerConstructor = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const bun = useSelector((store) => store.burgerConstructor.bun);
-    const ingredients = useSelector((store) => store.burgerConstructor.ingredients);
-    const orderNumber = useSelector((store) => store.order.orderNumber);
     const dispatch = useDispatch();
+    const { bun, ingredients } = useSelector((store) => store.burgerConstructor);
+    const { orderNumber, orderRequest, orderFailed } = useSelector((store) => store.order);
     const [{ isHover }, dropTarget] = useDrop({
         accept: "ingredient",
         drop(item) {
@@ -33,12 +33,17 @@ const BurgerConstructor = () => {
 
 
     const handleOrderButtonClick = () => {
-        dispatch(setOrderNumber(123234));
+        const ingredientsIds = [
+            ...ingredients.map(item => item._id),
+            bun ? bun._id : null,
+        ]
         setIsModalOpen(true);
+        dispatch(getOrderDetails(ingredientsIds));
     }
 
     const handleCloseOrderModal = () => {
         setIsModalOpen(!isModalOpen);
+        dispatch(resetOrder());
     }
 
     const handleDeleteItem = (item) => {
@@ -52,6 +57,7 @@ const BurgerConstructor = () => {
         return bunPrice + ingredientsPrice;
     }, [ingredients, bun]);
 
+    const orderBtnStyle = ingredients.length === 0 ? { pointerEvents: 'none', opacity: 0.5 } : {};
 
     return (
         <section
@@ -110,13 +116,14 @@ const BurgerConstructor = () => {
                 <span className={classNames(styles.currency, 'mr-10')}>
                     <CurrencyIcon type="primary" />
                 </span>
-                <Button htmlType="button" type="primary" size="large" onClick={handleOrderButtonClick}>
+                <Button htmlType="button" type="primary" size="large" onClick={handleOrderButtonClick} style={orderBtnStyle} >
                     Оформить заказ
                 </Button>
             </p>
 
             {isModalOpen && <Modal onClose={handleCloseOrderModal}>
-                <OrderDetails orderNumber={orderNumber} />
+                {orderRequest && <Loader />}
+                {!orderRequest && <OrderDetails orderNumber={orderNumber} />}
             </Modal>}
         </section>
     )
