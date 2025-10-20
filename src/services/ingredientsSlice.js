@@ -21,8 +21,23 @@ export const ingredientsSlice = createSlice({
   name: "ingredients",
   initialState,
   reducers: {
-    setIngredients(state, action) {
-      state.items = action.payload;
+    incrementCount(state, action) {
+      state.items.forEach((item) => {
+        if (item._id === action.payload._id && item.type !== "bun") {
+          item.count = item.count || 0;
+          item.count += 1;
+        }
+      });
+    },
+    decrementCount(state, action) {
+      state.items.forEach((item) => {
+        if (item._id === action.payload._id && item.type !== "bun") {
+          item.count = item.count || 0;
+          if (item.count > 0) {
+            item.count -= 1;
+          }
+        }
+      });
     },
   },
   extraReducers: (builder) => {
@@ -32,5 +47,5 @@ export const ingredientsSlice = createSlice({
   },
 });
 
-export const { setIngredients } = ingredientsSlice.actions;
+export const { incrementCount, decrementCount } = ingredientsSlice.actions;
 export default ingredientsSlice.reducer;

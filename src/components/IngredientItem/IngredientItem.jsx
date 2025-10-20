@@ -19,7 +19,7 @@ const IngredientItem = ({ item, onClick }) => {
             style={{ opacity: isDrag ? 0.5 : 1 }}
             onClick={onClick}>
             <img src={item.image} alt={item.name} />
-            {true && <span className={classNames(styles.ingredient_count, 'text_type_digits-default')}>{10}</span>}
+            {item.count > 0 && <span className={classNames(styles.ingredient_count, 'text_type_digits-default')}>{item.count}</span>}
             <p className={classNames(styles.ingredient_price, 'mt-1 mb-1', 'text text_type_digits-default')}>
                 <span className=' p-1'>{item.price}</span>
                 <CurrencyIcon type="primary" /></p>

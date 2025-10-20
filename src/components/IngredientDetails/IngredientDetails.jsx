@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 const IngredientDetails = ({ selectedIngredient }) => {
-    console.log('IngredientDetails ingredient:', selectedIngredient);
     const detailsInfo = {
         'Калории, ккал': selectedIngredient.calories,
         'Белки, г': selectedIngredient.proteins,

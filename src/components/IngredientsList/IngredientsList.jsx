@@ -26,7 +26,7 @@ const IngredientsList = ({ data, ingredientTypes, onItemClick, onScroll }) => {
                     <div className={styles.ingredients_list}>
                         {data.filter(item => item.type === type).map(item => {
                             return (
-                                <IngredientItem key={item.uniqueId} item={item} onClick={() => handleItemClick(item)} />
+                                <IngredientItem key={item._id} item={item} onClick={() => handleItemClick(item)} />
                             )
                         })
                         }
