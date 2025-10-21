@@ -1,29 +1,26 @@
 .burger_constructor {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   flex-direction: column;
   max-height: 912px;
   width: 600px;
   max-width: 600px;
 }
 
-.ingredient_wrapper {
-  display: flex;
-  max-height: 80px;
-  max-width: 560px;
-  align-items: center;
-  padding-left: 32px;
+.hover {
+  background: #1C1C21;
+  box-shadow: 0 0 3px rgba(76, 76, 255, 0.25);
 }
 
-.drag_icon {
-  z-index: 1;
-  cursor: grab;
+.bun_locked {
+  pointer-events: none;
 }
 
 .scroll_section {
   overflow-y: auto;
+  height: 500px;
   max-height: 480px;
-  scrollbar-color: #8585AD transparent;
+  scrollbar-color: #8585ad transparent;
   scrollbar-width: thin;
 }
 
@@ -43,5 +40,3 @@
   width: 32px;
   height: 32px;
 }
-
-

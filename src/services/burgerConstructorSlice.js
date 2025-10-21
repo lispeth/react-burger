@@ -24,9 +24,15 @@ export const burgerConstructorSlice = createSlice({
         state.ingredients.splice(ingredientIdx, 1);
       }
     },
+    updateIngredientsPosition: (state, action) => {
+      state.ingredients = action.payload;
+    },
   },
 });
 
 export default burgerConstructorSlice.reducer;
-export const { addComponentToConstructor, removeComponentFromConstructor } =
-  burgerConstructorSlice.actions;
+export const {
+  addComponentToConstructor,
+  removeComponentFromConstructor,
+  updateIngredientsPosition,
+} = burgerConstructorSlice.actions;

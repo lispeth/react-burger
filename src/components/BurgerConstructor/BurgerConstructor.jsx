@@ -1,23 +1,25 @@
-import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
-import { addComponentToConstructor, removeComponentFromConstructor } from '../../services/burgerConstructorSlice';
+import { addComponentToConstructor, removeComponentFromConstructor, updateIngredientsPosition } from '../../services/burgerConstructorSlice';
 import { decrementCount, incrementCount } from '../../services/ingredientsSlice';
 import { getOrderDetails, resetOrder } from '../../services/orderSlice';
+import { BurgerConstructorItem } from '../BurgerConstructorItem/BurgerConstructorItem';
+import Loader from '../Loader';
 import Modal from '../Modal';
 import OrderDetails from '../OrderDetails';
 import styles from './BurgerConstructor.module.css';
-import Loader from '../Loader';
 
 
 const BurgerConstructor = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const dispatch = useDispatch();
     const { bun, ingredients } = useSelector((store) => store.burgerConstructor);
-    const { orderNumber, orderRequest, orderFailed } = useSelector((store) => store.order);
+    const { orderNumber, orderRequest } = useSelector((store) => store.order);
+
     const [{ isHover }, dropTarget] = useDrop({
         accept: "ingredient",
         drop(item) {
@@ -25,12 +27,9 @@ const BurgerConstructor = () => {
             dispatch(incrementCount(item));
         },
         collect: monitor => ({
-            isHover: monitor.isOver(),
+            isHover: monitor.isOver({ shallow: true }),
         })
     });
-
-    const borderColor = isHover ? 'lightgreen' : 'transparent';
-
 
     const handleOrderButtonClick = () => {
         const ingredientsIds = [
@@ -57,60 +56,58 @@ const BurgerConstructor = () => {
         return bunPrice + ingredientsPrice;
     }, [ingredients, bun]);
 
+    const moveIngredient = useCallback((dragIndex, hoverIndex) => {
+        const dragIngredient = ingredients[dragIndex];
+        const newIngredients = [...ingredients];
+        newIngredients.splice(dragIndex, 1);
+        newIngredients.splice(hoverIndex, 0, dragIngredient);
+
+        dispatch(
+            updateIngredientsPosition(newIngredients)
+        );
+    }, [ingredients, dispatch]);
+
     const orderBtnStyle = ingredients.length === 0 ? { pointerEvents: 'none', opacity: 0.5 } : {};
 
     return (
         <section
-            className={classNames(styles.burger_constructor, 'pt-25 mr-4')}
-            ref={dropTarget}
-        // style={{ borderColor, border: '1px solid transparent' }}
+            className={classNames(styles.burger_constructor, 'pt-25 mr-4',
+                { [styles.hover]: isHover }
+            )}
         >
+            {bun && (
+                <div className={styles.bun_locked}>
+                    <BurgerConstructorItem
+                        key={`bun._id + ${Math.random()}`}
+                        item={bun}
+                        text={`${bun.name} (верх)`}
+                        type="top"
+                    />
+                </div>
+            )}
 
-            <p className={classNames(styles.ingredient_wrapper)}>
-                <span className={classNames(styles.drag_icon, { [styles.hidden]: true })}>
-                    <DragIcon type="primary" />
-                </span>
-                {bun && <ConstructorElement
-                    key={bun._id}
-                    type="top"
-                    text={`${bun.name} (верх)`}
-                    price={bun.price}
-                    isLocked={true}
-                    thumbnail={bun.image}
-                />}
-            </p>
-            <div className={styles.scroll_section}>
-                {ingredients.map(item => (
-                    <p
+            <div
+                className={styles.scroll_section}
+                ref={dropTarget}
+            >
+                {ingredients.map((item, index) => (
+                    <BurgerConstructorItem
                         key={`item._id + ${Math.random()}`}
-                        className={classNames(styles.ingredient_wrapper, 'mt-4 mr-4')}
-                    >
-                        <span className={classNames(styles.dragIcon, { [styles.hidden]: item.isLocked })}>
-                            <DragIcon type="primary" className={styles.drag_icon} />
-                        </span>
-                        <ConstructorElement
-                            type={item.type}
-                            text={item.name}
-                            price={item.price}
-                            isLocked={item.isLocked}
-                            thumbnail={item.image}
-                            handleClose={() => handleDeleteItem(item)}
-                        />
-                    </p>
+                        style={{ borderColor: isHover ? '#4C4CFF transparent' : 'transparent', borderWidth: '2px', borderStyle: 'solid' }}
+                        index={index}
+                        item={item}
+                        moveIngredient={moveIngredient}
+                        handleClose={handleDeleteItem}
+                    />
                 ))}
             </div>
-            <p className={classNames(styles.ingredient_wrapper)}>
-                <span className={classNames(styles.drag_icon, { [styles.hidden]: true })}>
-                    <DragIcon type="primary" />
-                </span>
-                {bun && <ConstructorElement
-                    type="bottom"
-                    text={`${bun.name} (низ)`}
-                    price={bun.price}
-                    isLocked={true}
-                    thumbnail={bun.image}
-                />}
-            </p>
+            {bun && (<div className={styles.bun_locked}><BurgerConstructorItem
+                key={`bun._id + ${Math.random()}`}
+                item={bun}
+                text={`${bun.name} (низ)`}
+                type="bottom"
+            />
+            </div>)}
             <p className={classNames(styles.total_price, 'mt-10')}>
                 <span className="text text_type_digits-medium">{totalPrice}</span>
                 <span className={classNames(styles.currency, 'mr-10')}>
@@ -121,11 +118,13 @@ const BurgerConstructor = () => {
                 </Button>
             </p>
 
-            {isModalOpen && <Modal onClose={handleCloseOrderModal}>
-                {orderRequest && <Loader />}
-                {!orderRequest && <OrderDetails orderNumber={orderNumber} />}
-            </Modal>}
-        </section>
+            {
+                isModalOpen && <Modal onClose={handleCloseOrderModal}>
+                    {orderRequest && <Loader />}
+                    {!orderRequest && <OrderDetails orderNumber={orderNumber} />}
+                </Modal>
+            }
+        </section >
     )
 }
 
