@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addSelectedIngredient, removeSelectedIngredient } from '../../services/ingredientInfoSlice';
@@ -35,7 +34,7 @@ const BurgerIngredients = () => {
         const sauceSectionTop = document.getElementById('sauce').getBoundingClientRect().top;
         const mainSectionTop = document.getElementById('main').getBoundingClientRect().top;
 
-        const offset = 250; 
+        const offset = 250;
 
         if (bunPositionTop <= offset && sauceSectionTop > offset) {
             setActiveTab('bun');
@@ -54,29 +53,12 @@ const BurgerIngredients = () => {
                 Соберите бургер
             </header>
             <Tab className={styles.tabs} types={ingredientTypes} activeTab={activeTab} ></Tab>
-            <IngredientsList  data={items} onScroll={handleScroll} ingredientTypes={ingredientTypes} onItemClick={handleItemClick}></IngredientsList>
+            <IngredientsList data={items} onScroll={handleScroll} ingredientTypes={ingredientTypes} onItemClick={handleItemClick}></IngredientsList>
             {detailsModalIsOpen && <Modal title="Детали ингредиента" onClose={handleCloseModal}>
-                <IngredientDetails selectedIngredient={selectedIngredient}  />
+                <IngredientDetails selectedIngredient={selectedIngredient} />
             </Modal>}
         </section>
     )
 }
-
-BurgerIngredients.propTypes = {
-    data: PropTypes.arrayOf(
-        PropTypes.shape({
-            _id: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-            type: PropTypes.string.isRequired,
-            proteins: PropTypes.number.isRequired,
-            fat: PropTypes.number.isRequired,
-            carbohydrates: PropTypes.number.isRequired,
-            calories: PropTypes.number.isRequired,
-            price: PropTypes.number.isRequired,
-            image: PropTypes.string.isRequired,
-        })
-    ).isRequired
-};
-
 
 export default BurgerIngredients;

@@ -6,8 +6,9 @@ import classNames from "classnames";
 import styles from "./BurgerConstructorItem.module.css";
 import { useRef } from "react";
 import { useDrop, useDrag } from "react-dnd";
+import PropTypes from "prop-types";
 
-export const BurgerConstructorItem = ({
+const BurgerConstructorItem = ({
   item,
   index,
   text,
@@ -71,9 +72,8 @@ export const BurgerConstructorItem = ({
       ref={ref}
     >
       <span
-        className={classNames(styles.dragIcon, {
-          [styles.hidden]: item.isLocked,
-        })}
+        className={styles.drag_icon_container}
+        style={{ visibility: item.type === "bun" ? "hidden" : "visible" }}
       >
         <DragIcon type="primary" className={styles.drag_icon} />
       </span>
@@ -88,4 +88,26 @@ export const BurgerConstructorItem = ({
       />
     </p>
   );
+};
+
+export default BurgerConstructorItem;
+
+BurgerConstructorItem.propTypes = {
+  item: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    type: PropTypes.oneOf(["bun", "sauce", "main"]).isRequired,
+    price: PropTypes.number.isRequired,
+    image: PropTypes.string.isRequired,
+    image_large: PropTypes.string.isRequired,
+    calories: PropTypes.number.isRequired,
+    proteins: PropTypes.number.isRequired,
+    fat: PropTypes.number.isRequired,
+    carbohydrates: PropTypes.number.isRequired,
+  }).isRequired,
+  index: PropTypes.number,
+  text: PropTypes.string,
+  type: PropTypes.oneOf(["top", "bottom"]),
+  handleClose: PropTypes.func,
+  moveIngredient: PropTypes.func,
 };

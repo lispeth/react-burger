@@ -1,13 +1,12 @@
 import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
 import { useCallback, useMemo, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import { addComponentToConstructor, removeComponentFromConstructor, updateIngredientsPosition } from '../../services/burgerConstructorSlice';
 import { decrementCount, incrementCount } from '../../services/ingredientsSlice';
 import { getOrderDetails, resetOrder } from '../../services/orderSlice';
-import { BurgerConstructorItem } from '../BurgerConstructorItem/BurgerConstructorItem';
+import BurgerConstructorItem from '../BurgerConstructorItem/BurgerConstructorItem';
 import Loader from '../Loader';
 import Modal from '../Modal';
 import OrderDetails from '../OrderDetails';
@@ -127,22 +126,6 @@ const BurgerConstructor = () => {
         </section >
     )
 }
-
-BurgerConstructor.propTypes = {
-    data: PropTypes.arrayOf(
-        PropTypes.shape({
-            _id: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-            type: PropTypes.string.isRequired,
-            proteins: PropTypes.number.isRequired,
-            fat: PropTypes.number.isRequired,
-            carbohydrates: PropTypes.number.isRequired,
-            calories: PropTypes.number.isRequired,
-            price: PropTypes.number.isRequired,
-            image: PropTypes.string.isRequired,
-        })
-    ).isRequired
-};
 
 
 export default BurgerConstructor;

@@ -16,6 +16,13 @@
   pointer-events: none;
 }
 
+
+.drag_icon_container{
+  width: 24px;
+  display: flex;
+  justify-content: center;
+}
+
 .drag_icon {
   z-index: 1;
   cursor: grab;
