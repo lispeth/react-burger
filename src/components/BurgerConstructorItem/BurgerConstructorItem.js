@@ -7,6 +7,7 @@ import styles from "./BurgerConstructorItem.module.css";
 import { useRef } from "react";
 import { useDrop, useDrag } from "react-dnd";
 import PropTypes from "prop-types";
+import { IngredientType } from "../../utils/types";
 
 const BurgerConstructorItem = ({
   item,
@@ -66,7 +67,7 @@ const BurgerConstructorItem = ({
   drag(drop(ref));
 
   return (
-    <p
+    <div
       className={classNames(styles.ingredient_wrapper, "mt-4 mr-4")}
       style={{ opacity }}
       ref={ref}
@@ -86,25 +87,14 @@ const BurgerConstructorItem = ({
         moveIngredient={moveIngredient}
         handleClose={() => handleClose(item)}
       />
-    </p>
+    </div>
   );
 };
 
 export default BurgerConstructorItem;
 
 BurgerConstructorItem.propTypes = {
-  item: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    type: PropTypes.oneOf(["bun", "sauce", "main"]).isRequired,
-    price: PropTypes.number.isRequired,
-    image: PropTypes.string.isRequired,
-    image_large: PropTypes.string.isRequired,
-    calories: PropTypes.number.isRequired,
-    proteins: PropTypes.number.isRequired,
-    fat: PropTypes.number.isRequired,
-    carbohydrates: PropTypes.number.isRequired,
-  }).isRequired,
+  item: IngredientType.isRequired,
   index: PropTypes.number,
   text: PropTypes.string,
   type: PropTypes.oneOf(["top", "bottom"]),

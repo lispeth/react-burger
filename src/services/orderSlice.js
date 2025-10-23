@@ -7,15 +7,11 @@ const initialState = {
   orderFailed: false,
 };
 
-export const getOrderDetails = createAsyncThunk(
+export const getOrderNumber = createAsyncThunk(
   "order/orderDetails",
   async (ingredients) => {
-    try {
-      const response = await getOrder(ingredients);
-      return response;
-    } catch (error) {
-      throw new Error("Failed to fetch order details");
-    }
+    const response = await getOrder(ingredients);
+    return response.order.number;
   }
 );
 
@@ -28,15 +24,15 @@ export const orderSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getOrderDetails.pending, (state) => {
+    builder.addCase(getOrderNumber.pending, (state) => {
       state.orderRequest = true;
       state.orderFailed = false;
     });
-    builder.addCase(getOrderDetails.fulfilled, (state, action) => {
+    builder.addCase(getOrderNumber.fulfilled, (state, action) => {
       state.orderRequest = false;
       state.orderNumber = action.payload;
     });
-    builder.addCase(getOrderDetails.rejected, (state) => {
+    builder.addCase(getOrderNumber.rejected, (state) => {
       state.orderRequest = false;
       state.orderFailed = true;
     });

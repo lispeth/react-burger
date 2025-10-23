@@ -16,12 +16,11 @@ const Modal = (props) => {
         return () => {
             window.removeEventListener('keydown', handleEscPress);
         }
-    }
-    )
+    }, [])
 
     return ReactDOM.createPortal(
         (
-            <div className="modal_root">
+            <div id="modals">
                 <ModalOverlay onClick={props.onClose} />
                 <div className={styles.modal_container}>
                     <header className={styles.modal_header}>

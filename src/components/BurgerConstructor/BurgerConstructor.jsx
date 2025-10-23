@@ -3,9 +3,8 @@ import classNames from 'classnames';
 import { useCallback, useMemo, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
-import { addComponentToConstructor, removeComponentFromConstructor, updateIngredientsPosition } from '../../services/burgerConstructorSlice';
-import { decrementCount, incrementCount } from '../../services/ingredientsSlice';
-import { getOrderDetails, resetOrder } from '../../services/orderSlice';
+import { addComponentToConstructor, removeComponentFromConstructor, resetBurgerConstructor, updateIngredientsPosition } from '../../services/burgerConstructorSlice';
+import { getOrderNumber, resetOrder } from '../../services/orderSlice';
 import BurgerConstructorItem from '../BurgerConstructorItem/BurgerConstructorItem';
 import Loader from '../Loader';
 import Modal from '../Modal';
@@ -23,7 +22,7 @@ const BurgerConstructor = () => {
         accept: "ingredient",
         drop(item) {
             dispatch(addComponentToConstructor(item));
-            dispatch(incrementCount(item));
+            if (bun && item.type === 'bun') return;
         },
         collect: monitor => ({
             isHover: monitor.isOver({ shallow: true }),
@@ -36,7 +35,8 @@ const BurgerConstructor = () => {
             bun ? bun._id : null,
         ]
         setIsModalOpen(true);
-        dispatch(getOrderDetails(ingredientsIds));
+        dispatch(getOrderNumber(ingredientsIds));
+        dispatch(resetBurgerConstructor());
     }
 
     const handleCloseOrderModal = () => {
@@ -45,7 +45,6 @@ const BurgerConstructor = () => {
     }
 
     const handleDeleteItem = (item) => {
-        dispatch(decrementCount(item));
         dispatch(removeComponentFromConstructor(item));
     }
 
@@ -77,7 +76,7 @@ const BurgerConstructor = () => {
             {bun && (
                 <div className={styles.bun_locked}>
                     <BurgerConstructorItem
-                        key={`bun._id + ${Math.random()}`}
+                        key={bun.uniqueId}
                         item={bun}
                         text={`${bun.name} (верх)`}
                         type="top"
@@ -91,7 +90,7 @@ const BurgerConstructor = () => {
             >
                 {ingredients.map((item, index) => (
                     <BurgerConstructorItem
-                        key={`item._id + ${Math.random()}`}
+                        key={item.uniqueId}
                         style={{ borderColor: isHover ? '#4C4CFF transparent' : 'transparent', borderWidth: '2px', borderStyle: 'solid' }}
                         index={index}
                         item={item}
@@ -101,7 +100,7 @@ const BurgerConstructor = () => {
                 ))}
             </div>
             {bun && (<div className={styles.bun_locked}><BurgerConstructorItem
-                key={`bun._id + ${Math.random()}`}
+                key={bun.uniqueId}
                 item={bun}
                 text={`${bun.name} (низ)`}
                 type="bottom"
