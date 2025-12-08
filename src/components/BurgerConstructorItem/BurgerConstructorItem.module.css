@@ -1,0 +1,29 @@
+.ingredient_wrapper {
+  display: flex;
+  max-height: 80px;
+  max-width: 560px;
+  align-items: center;
+  padding-left: 32px;
+}
+
+.ingredient_wrapper:active {
+  cursor: grabbing;
+}
+
+.bun_top,
+.bun_bottom {
+  margin-left: 32px;
+  pointer-events: none;
+}
+
+
+.drag_icon_container{
+  width: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.drag_icon {
+  z-index: 1;
+  cursor: grab;
+}
